@@ -1,0 +1,59 @@
+services:
+  user-service:
+    build: ./user-service
+    ports:
+      - "4000:4000"
+    depends_on:
+      - user-db
+    environment:
+      - DATABASE_URL=postgres://user:password@user-db:5432/userdb
+
+  task-service:
+    build: ./task-service
+    ports:
+      - "4001:4001"
+    depends_on:
+      - task-db
+    environment:
+      - DATABASE_URL=postgres://user:password@task-db:5432/taskdb
+
+  notification-service:
+    build: ./notification-service
+    ports:
+      - "4002:4002"
+
+  logging-service:
+    build: ./logging-service
+    ports:
+      - "4003:4003"
+    depends_on:
+      - logging-db
+    environment:
+      - DATABASE_URL=postgres://user:password@logging-db:5432/loggingdb
+
+  user-db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: userdb
+    ports:
+      - "5433:5432"
+
+  task-db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: taskdb
+    ports:
+      - "5436:5432"
+
+  logging-db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: loggingdb
+    ports:
+      - "5435:5432"
